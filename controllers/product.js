@@ -26,7 +26,7 @@ exports.update = (req, res) => {
     }
 
     let product = req.product;
-    // lodash   the product and the fields as params.
+    // lodash   updates all the fields using the product and the fields as params.
     product = _.extend(product, fields);
 
     if (files.photo) {
