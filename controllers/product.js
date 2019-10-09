@@ -17,28 +17,23 @@ exports.update = (req, res) => {
 
     // validate for all fields required
     const { name, description, price, category, quantity, shipping } = fields;
-
     if (!name || !description || !price || !category || !quantity || !shipping) {
       res.status(400).json({
         error: 'all fields are required'
       });
       return;
     }
-
     let product = req.product;
     // lodash   updates all the fields using the product and the fields as params.
     product = _.extend(product, fields);
-
     if (files.photo) {
       if (files.photo.size > 1000000) {
         res.status(400).json({ error: ' image should be less than 1mb in size' });
         return;
       }
-
       product.photo.data = fs.readFileSync(files.photo.path);
       product.photo.contentType = files.photo.type;
     }
-
     product.save((err, result) => {
       if (err) {
         console.log(err);
@@ -91,17 +86,14 @@ exports.create = (req, res) => {
       res.status(400).json({ error: ' image could not be uploaded' });
       return;
     }
-
     // validate for all fields required
     const { name, description, price, category, quantity, shipping } = fields;
-
     if (!name || !description || !price || !category || !quantity || !shipping) {
       res.status(400).json({
         error: 'all fields are required'
       });
       return;
     }
-
     let product = new Product(fields);
     if (files.photo) {
       // 1kb = 1000
@@ -111,7 +103,6 @@ exports.create = (req, res) => {
         res.status(400).json({ error: ' image should be less than 1mb in size' });
         return;
       }
-
       product.photo.data = fs.readFileSync(files.photo.path);
       product.photo.contentType = files.photo.type;
     }
