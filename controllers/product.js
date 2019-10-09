@@ -120,6 +120,13 @@ exports.create = (req, res) => {
   });
 };
 
+// return products based on most popular
+// by most popular query format = /products?sortBy=sold&order=desc&limit=4
+
+// return products based on new arrivals
+// based on arrival format = /products?sortBy=createdAt&order=desc&limit=4
+
+// if no params sent, then all products are returned
 exports.list = (req, res) => {
   // options use supplied params, or last value in the ternary, which is the default
   let order = req.query.order ? req.query.order : 'asc';
@@ -174,10 +181,52 @@ exports.listCategories = (req, res) => {
   });
 };
 
-// return products based on most popular
-// by most popular query format = /products?sortBy=sold&order=desc&limit=4
+/**
+ * list products by search
+ * show categories in checkbox and price range in radio buttons
+ * as the user clicks on those checkboxes and radio buttons
+ * we will make api calls and show the products to users based on what they want
+ */
+exports.listBySearch = (req, res) => {
+  let order = req.body.order ? req.body.order : 'desc';
+  let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
+  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+  let skip = parseInt(req.body.skip);
+  let findArgs = {};
 
-// / return products based on new arrivals
-// based on arrival format = /products?sortBy=createdAt&order=desc&limit=4
+  // console.log(order, sortBy, limit, skip, req.body.filters);
+  // console.log("findArgs", findArgs);
 
-// if no params sent, then all products are returned
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
+      if (key === 'price') {
+        // gte -  greater than price [0-10]
+        // lte - less than
+        findArgs[key] = {
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1]
+        };
+      } else {
+        findArgs[key] = req.body.filters[key];
+      }
+    }
+  }
+
+  Product.find(findArgs)
+    .select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .skip(skip)
+    .limit(limit)
+    .exec((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'products not found'
+        });
+      }
+      res.json({
+        size: data.length,
+        data
+      });
+    });
+};
