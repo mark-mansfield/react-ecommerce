@@ -162,6 +162,18 @@ exports.listRelated = (req, res) => {
       res.json(products);
     });
 };
+
+exports.listCategories = (req, res) => {
+  Product.distinct('category', {}, (err, categories) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'categories not found'
+      });
+    }
+    res.json(categories);
+  });
+};
+
 // return products based on most popular
 // by most popular query format = /products?sortBy=sold&order=desc&limit=4
 
