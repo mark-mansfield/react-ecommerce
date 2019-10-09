@@ -119,3 +119,32 @@ exports.create = (req, res) => {
     });
   });
 };
+
+exports.list = (req, res) => {
+  // options use supplied params, or last value in the ternary, which is the default
+  let order = req.query.order ? req.query.order : 'asc';
+  let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+  let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+  Product.find()
+    .select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'product not found'
+        });
+      }
+      res.send(products);
+    });
+};
+
+// return products based on most popular
+// by most popular query format = /products?sortBy=sold&order=desc&limit=4
+
+// / return products based on new arrivals
+// based on arrival format = /products?sortBy=createdAt&order=desc&limit=4
+
+// if no params sent, then all products are returned
