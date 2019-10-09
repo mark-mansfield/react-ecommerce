@@ -137,10 +137,31 @@ exports.list = (req, res) => {
           error: 'product not found'
         });
       }
-      res.send(products);
+      res.json(products);
     });
 };
 
+// list all products based on the request product category
+//  other products that have the same category will be returned
+// find all related not including  current product
+exports.listRelated = (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+  Product.find({
+    _id: { $ne: req.product },
+    category: req.product.category
+  })
+    .limit(limit)
+    .populate('category', '_id name')
+    .exec((err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'products not found'
+        });
+      }
+      res.json(products);
+    });
+};
 // return products based on most popular
 // by most popular query format = /products?sortBy=sold&order=desc&limit=4
 
