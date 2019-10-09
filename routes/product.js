@@ -16,7 +16,7 @@ const {
 
 const { requireSignIn, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
-
+//routes
 router.put('/product/:productId/:userId', requireSignIn, isAdmin, isAuth, update);
 router.get('/product/:productId', read);
 router.delete('/product/:productId/:userId', requireSignIn, isAdmin, isAuth, remove);
