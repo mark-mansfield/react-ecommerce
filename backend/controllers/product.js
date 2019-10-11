@@ -42,6 +42,7 @@ exports.update = (req, res) => {
         });
         return;
       }
+
       res.json(result);
     });
   });
@@ -115,6 +116,7 @@ exports.create = (req, res) => {
         });
         return;
       }
+      console.log(result);
       res.json(result);
     });
   });

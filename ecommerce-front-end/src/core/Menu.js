@@ -10,6 +10,7 @@ const isActive = (history, path) => {
   }
 };
 
+console.log(isAuthenticated() && isAuthenticated().user.role === 1);
 const Menu = ({ history }) => (
   <div>
     <ul className="nav nav-tabs bg-primary">
@@ -18,11 +19,7 @@ const Menu = ({ history }) => (
           Home
         </Link>
       </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/user/dashboard" style={isActive(history, '/user/dashboard')}>
-          Dashboard
-        </Link>
-      </li>
+
       {isAuthenticated() && isAuthenticated().user.role === 0 && (
         <li className="nav-item">
           <Link className="nav-link" to="/user/dashboard" style={isActive(history, '/user/dashboard')}>
@@ -32,7 +29,7 @@ const Menu = ({ history }) => (
       )}
       {isAuthenticated() && isAuthenticated().user.role === 1 && (
         <li className="nav-item">
-          <Link className="nav-link" to="/admin/dashboard" style={isActive(history, '/user/dashboard')}>
+          <Link className="nav-link" to="/admin/dashboard" style={isActive(history, '/admin/dashboard')}>
             Dashboard
           </Link>
         </li>
