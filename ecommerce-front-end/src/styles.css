@@ -5,6 +5,16 @@
 .nav:hover {
   border-radius: 0px;
 }
+
+/* cart badge */
+.cart-badge,
+.cart-badge:hover {
+  border-radius: 50%;
+  color: white;
+  padding: 10px;
+  background-color: black;
+}
+
 /**
  * single product page - product name
  */

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getProducts } from './apiCore';
 import Layout from './Layout';
 import Search from './Search';
