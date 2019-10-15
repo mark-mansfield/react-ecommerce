@@ -75,8 +75,8 @@ const Signin = () => {
 
   return (
     <Layout
-      title="Signup"
-      description="Sign up to Node React E-commerce App"
+      title="Signin"
+      description="Signin to Node React E-commerce App"
       className="container col-md-8 offset-md-2"
     >
       <p> u: johnny@gmail.com</p>
