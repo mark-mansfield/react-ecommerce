@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts, getBraintreeClientToken, processPayment } from './apiCore';
-import Layout from './Layout';
-import Search from './Search';
-import Card from './Card';
+import { getBraintreeClientToken, processPayment, createOrder } from './apiCore';
+import { emptyCart } from './cartHelpers';
 import { isAuthenticated } from '../auth';
 import DropIn from 'braintree-web-drop-in-react';
 
-const Checkout = ({ products }) => {
+const Checkout = ({ products, setRun = f => f, run = undefined }) => {
   const [data, setData] = useState({
+    loading: false,
     success: false,
     clientToken: null,
     error: '',
@@ -50,6 +49,7 @@ const Checkout = ({ products }) => {
   };
 
   const buy = () => {
+    setData({ loading: true });
     // send nonce to server
     // nonce = data.instance.requestPaymentMethod
     let nonce;
@@ -69,13 +69,24 @@ const Checkout = ({ products }) => {
 
         processPayment(userId, token, paymentData)
           .then(response => {
-            setData({ ...data, success: response.success });
-
-            // empty cart
             // create order
+            const createOrderData = {
+              products: products,
+              transaction_Id: response.transaction.id,
+              amount: response.transaction.amount,
+              address: data.address
+            };
+            createOrder(userId, token, createOrderData);
+            setData({ ...data, success: response.success });
+            emptyCart(() => {
+              setRun(!run); // update parent state
+              console.log('payment success and empty cart');
+              setData({ loading: false });
+            });
           })
           .catch(error => {
             console.log(error);
+            setData({ loading: false });
           });
       })
       .catch(error => {
@@ -83,6 +94,13 @@ const Checkout = ({ products }) => {
         setData({ ...data, error: error.message });
       });
   };
+
+  const showLoading = loading =>
+    loading && (
+      <div className="alert alert-info">
+        <h2>Processing ....</h2>
+      </div>
+    );
 
   const showSuccess = success => (
     <div className="alert alert-danger" style={{ display: success ? '' : 'none' }}>
@@ -97,13 +115,29 @@ const Checkout = ({ products }) => {
     </div>
   );
 
+  const handleAddress = e => {
+    setData({ ...data, address: e.target.value });
+  };
+
   const showDropIn = () => (
     <div onBlur={() => setData({ ...data, error: '' })}>
       {data.clientToken !== null && products.length > 0 ? (
         <div>
+          <div className="gorm-group mb-3">
+            <label className="text-muted">Delivery Address:</label>
+            <textarea
+              onChange={handleAddress}
+              value={data.address}
+              placeholder="Type your delivery address here"
+              className="form-control"
+            ></textarea>
+          </div>
           <DropIn
             options={{
-              authorization: data.clientToken
+              authorization: data.clientToken,
+              paypal: {
+                flow: 'vault'
+              }
             }}
             onInstance={instance => (data.instance = instance)}
           />
@@ -118,6 +152,7 @@ const Checkout = ({ products }) => {
   return (
     <div>
       <h2>Total: ${getTotal(products)}</h2>
+      {showLoading(data.loading)}
       {showSuccess(data.success)}
       {showError(data.error)}
       {showCheckout()}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts } from './apiCore';
-import { getCart, removeItem } from './cartHelpers';
+import { getCart } from './cartHelpers';
 import Layout from './Layout';
 import Card from './Card';
 import Checkout from './Checkout';
@@ -14,7 +13,7 @@ const Cart = () => {
     setItems(getCart());
   }, [run]);
 
-  const showItems = item => {
+  const showItems = items => {
     return (
       <div>
         <h2>Your cart has {items.length} items</h2>
@@ -53,7 +52,7 @@ const Cart = () => {
         <div className="col-6">
           <h2 className="mb-4">Your Cart summary</h2>
           <hr />
-          <Checkout products={items} />
+          <Checkout  setRun={setRun} products={items} />
         </div>
       </div>
     </Layout>
