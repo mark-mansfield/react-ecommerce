@@ -31,3 +31,27 @@ exports.update = (req, res) => {
     res.json(user);
   });
 };
+
+exports.addOrderToUserHistory = (req, res, next) => {
+  let history = [];
+  req.body.order.products.forEach(item => {
+    history.push({
+      _id: item._id,
+      name: item.name,
+      description: item.description,
+      category: item.category,
+      quantity: item.count,
+      transaction_Id: req.body.order.transaction_Id,
+      amount: req.body.order.amount
+    });
+  });
+
+  user.findOneAndUpdate({ _id: req.profile._id }, { $push: { history: history } }, { new: true }, (error, data) => {
+    if (error) {
+      return res.status(400).json({
+        error: 'Could not update users purchase history'
+      });
+    }
+    next();
+  });
+};
