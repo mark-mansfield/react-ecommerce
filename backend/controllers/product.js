@@ -15,16 +15,10 @@ exports.update = (req, res) => {
       return;
     }
 
-    // validate for all fields required
-    const { name, description, price, category, quantity, shipping } = fields;
-    if (!name || !description || !price || !category || !quantity || !shipping) {
-      res.status(400).json({
-        error: 'all fields are required'
-      });
-      return;
-    }
     let product = req.product;
-    // lodash   updates all the fields using the product and the fields as params.
+    console.log(req);
+    console.log(product);
+    // lodash  updates all the fields using the product and the fields as params.
     product = _.extend(product, fields);
     if (files.photo) {
       if (files.photo.size > 1000000) {
@@ -34,6 +28,7 @@ exports.update = (req, res) => {
       product.photo.data = fs.readFileSync(files.photo.path);
       product.photo.contentType = files.photo.type;
     }
+
     product.save((err, result) => {
       if (err) {
         console.log(err);
@@ -81,7 +76,6 @@ exports.read = (req, res) => {
 
 exports.create = (req, res) => {
   // handle form data and files
-
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (error, fields, files) => {

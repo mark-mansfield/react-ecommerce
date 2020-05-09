@@ -65,6 +65,7 @@ const Shop = () => {
     );
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     init();
     loadFilteredResults(skip, limit, myFilters.filters);

@@ -9,6 +9,7 @@ const Cart = () => {
   const [items, setItems] = useState([]);
   const [run, setRun] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setItems(getCart());
   }, [run]);

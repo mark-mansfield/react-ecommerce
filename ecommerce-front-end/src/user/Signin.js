@@ -74,12 +74,11 @@ const Signin = () => {
   };
 
   return (
-    <Layout
-      title="Signin"
-      description="Signin to Node React E-commerce App"
-      className="container col-md-8 offset-md-2"
-    >
+    <Layout title="Signin" description="Signin to Node React E-commerce App" className="container col-md-8 offset-md-2">
       <p> u: johnny@gmail.com</p>
+      <p> p: 123456</p>
+
+      <p> u: user@gmail.com</p>
       <p> p: 123456</p>
       {showLoading()}
       {showError()}

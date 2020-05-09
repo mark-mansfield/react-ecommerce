@@ -28,7 +28,9 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
     });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+
     getToken(userId, token);
   }, []);
 

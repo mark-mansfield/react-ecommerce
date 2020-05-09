@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../core/Layout';
 import { Link } from 'react-router-dom';
 import { isAuthenticated } from '../auth/';
+
 const AdminDashboard = () => {
   const { user } = isAuthenticated();
 
@@ -23,6 +24,11 @@ const AdminDashboard = () => {
           <li className="list-group-item">
             <Link className="nav-link" to="/admin/orders">
               View Orders
+            </Link>
+          </li>
+          <li className="list-group-item">
+            <Link className="nav-link" to="/admin/products">
+              Manage Products
             </Link>
           </li>
         </ul>

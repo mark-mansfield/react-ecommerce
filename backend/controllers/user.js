@@ -1,4 +1,6 @@
 const user = require('../models/user');
+const { Order } = require('../models/order');
+const { errorHandler } = require('../helpers/dbErrorHandler');
 
 exports.userById = (req, res, next, id) => {
   user.findById(id).exec((err, user) => {
@@ -54,4 +56,19 @@ exports.addOrderToUserHistory = (req, res, next) => {
     }
     next();
   });
+};
+
+exports.purchaseHistory = (req, res) => {
+  Order.find({ user: req.profile.id })
+    .populate('user', '_id name')
+    .sort('-created')
+    .exec((err, orders) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err)
+        });
+      }
+      console.log(orders);
+      res.json(orders);
+    });
 };

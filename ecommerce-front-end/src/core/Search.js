@@ -3,7 +3,6 @@ import { getCategories, List, list } from './apiCore';
 import Card from './Card';
 
 const Search = ({ searchResultsReturned }) => {
-  console.log(searchResultsReturned);
   const [data, setData] = useState({
     categories: [],
     category: '',
@@ -95,6 +94,7 @@ const Search = ({ searchResultsReturned }) => {
     );
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadCategories();
   }, []);

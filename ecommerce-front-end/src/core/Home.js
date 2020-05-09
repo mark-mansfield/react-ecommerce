@@ -7,7 +7,7 @@ const Home = () => {
   const [productsBySell, setProductsBySell] = useState([]);
   const [productsByArrival, setProductsByArrival] = useState([]);
 
-  const [hasSearched, setHasSearched] = useState(false);
+  // const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState(false);
 
   const loadProductsBySell = () => {
@@ -29,7 +29,7 @@ const Home = () => {
       }
     });
   };
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadProductsByArrival();
     loadProductsBySell();

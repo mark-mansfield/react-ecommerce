@@ -27,6 +27,7 @@ const Product = props => {
     });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const productId = props.match.params.productId;
     loadSingleProduct(productId);

@@ -10,7 +10,6 @@ const isActive = (history, path) => {
   }
 };
 
-console.log(isAuthenticated() && isAuthenticated().user.role === 1);
 const Menu = ({ history }) => (
   <div>
     <ul className="nav nav-tabs bg-primary">
